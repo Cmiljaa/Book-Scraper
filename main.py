@@ -36,3 +36,10 @@ def extract_book_data(book):
         "in_stock": in_stock,
         "image_url": full_img_url
 	}
+
+def export_books_data(book_data):
+	data_frame = pandas.DataFrame(book_data)
+	data_frame.to_csv('books.csv', index=False)
+	data_frame.to_json('books.json', orient='records', indent=4)
+	data_frame.to_excel('Book_Data.xlsx', index=False)
+
