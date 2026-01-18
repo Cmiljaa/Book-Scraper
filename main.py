@@ -43,3 +43,19 @@ def export_books_data(book_data):
 	data_frame.to_json('books.json', orient='records', indent=4)
 	data_frame.to_excel('Book_Data.xlsx', index=False)
 
+def main(url):
+	all_books = get_data(url)
+	book_data = []
+	if all_books:
+		for book in all_books:
+			data = extract_book_data(book)
+			book_data.append(data)
+			(f'{data['title']}')
+			print(f'{data['price']}')
+			print(f'{data['in_stock']}')
+			print(f'{data['image_url']}')
+			save_img(data['image_url'])
+			print('-' * 100)
+		export_books_data(book_data)
+
+main(url)
