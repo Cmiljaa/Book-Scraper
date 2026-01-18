@@ -16,6 +16,23 @@ def get_data(url):
 
 	return soup.find_all('article', class_="product_pod")
 
+def save_img(full_img_url):
+	try:
+		img_data = requests.get(full_img_url, stream=True)
+		
+		filename = full_img_url.split('/')[-1]
+		if not filename:
+			filename = 'downloaded_image.jpg'
+
+		with open(f"images/{filename}", 'wb') as f:
+			for chunk in img_data.iter_content(chunk_size=8192):
+				f.write(chunk)
+		print(f"Saved {filename}")
+	except requests.exceptions.RequestException as e:
+		print(f"Error downloading {full_img_url}: {e}")
+	except Exception as e:
+		print(f"An unexpected error occurred: {e}")
+
 def extract_book_data(book):
 	name_tag = book.find('h3')
 	title = name_tag.findChild().text if name_tag else 'N/A'
