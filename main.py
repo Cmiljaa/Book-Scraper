@@ -47,6 +47,13 @@ def extract_book_data(book):
 	in_stock_tag = book.find('p', class_='instock availability')
 	in_stock = in_stock_tag.text.strip() if in_stock_tag else 'N/A'
 
+	rating_tag = book.find("p", class_=["star-rating"])
+	rating = rating_tag.text.strip() if rating_tag else 'N/A'
+	classes = rating_tag.get("class", [])
+	rating_class = [c for c in classes if c != "star-rating"][0]
+	rating_map = {"One":1,"Two":2,"Three":3,"Four":4,"Five":5}
+	rating = rating_map.get(rating_class, 0)
+
 	img_tag = book.find('img', class_='thumbnail')
 	img_url = img_tag['src']
 	full_img_url = urljoin(url, img_url)
@@ -55,6 +62,7 @@ def extract_book_data(book):
 		"title": title,
         "price": price,
         "in_stock": in_stock,
+		"rating": rating,
         "image_url": full_img_url
 	}
 
@@ -76,6 +84,7 @@ def main(url):
 			print(f'{data['in_stock']}')
 			print(f'{data['image_url']}')
 			save_img(data['image_url'])
+			print(f'{data["rating"]}')
 			print('-' * 100)
 		export_books_data(book_data)
 
