@@ -39,10 +39,11 @@ def save_img(full_img_url):
 
 def extract_book_data(book):
 	name_tag = book.find('h3')
-	title = name_tag.findChild().text if name_tag else 'N/A'
+	title = name_tag.find().text if name_tag else 'N/A'
 
 	price_tag = book.find('p', class_='price_color')
-	price = price_tag.text if price_tag else 'N/A'
+	price = price_tag.text.strip().replace("Â£","")
+	
 
 	in_stock_tag = book.find('p', class_='instock availability')
 	in_stock = in_stock_tag.text.strip() if in_stock_tag else 'N/A'
@@ -79,12 +80,12 @@ def main(url):
 		for book in all_books:
 			data = extract_book_data(book)
 			book_data.append(data)
-			(f'{data['title']}')
-			print(f'{data['price']}')
-			print(f'{data['in_stock']}')
-			print(f'{data['image_url']}')
-			save_img(data['image_url'])
+			(f'{data["title"]}')
+			print(f'{data["price"]}')
+			print(f'{data["in_stock"]}')
 			print(f'{data["rating"]}')
+			print(f'{data["image_url"]}')
+			save_img(data["image_url"])
 			print('-' * 100)
 		export_books_data(book_data)
 
