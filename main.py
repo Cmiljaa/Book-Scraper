@@ -2,15 +2,11 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 import pandas
-
-url = 'https://books.toscrape.com/index.html'
-
-HEADERS = {
-    "User-Agent": "Mozilla/5.0"
-}
+import book_page_scraper
+import config
 
 def get_data(url):
-	response = requests.get(url, headers=HEADERS, timeout=10)
+	response = requests.get(url, headers=config.HEADERS, timeout=config.TIMEOUT)
 
 	if response.status_code != 200:
 		print(f"Failed to receive the data. Status code: {response.status_code}")
@@ -22,13 +18,13 @@ def get_data(url):
 
 def save_img(full_img_url):
 	try:
-		img_data = requests.get(full_img_url, headers=HEADERS, timeout=10, stream=True)
+		img_data = requests.get(full_img_url, headers=config.HEADERS, timeout=config.TIMEOUT, stream=True)
 		
 		filename = full_img_url.split('/')[-1]
 		if not filename:
 			filename = 'downloaded_image.jpg'
 
-		with open(f"images/{filename}", 'wb') as f:
+		with open(f"{config.IMAGES_DIR}/{filename}", 'wb') as f:
 			for chunk in img_data.iter_content(chunk_size=8192):
 				f.write(chunk)
 		print(f"Saved {filename}")

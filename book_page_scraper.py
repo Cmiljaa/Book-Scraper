@@ -1,8 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
+import config
 def get_data(url):
 	
-	response = requests.get(url, headers=HEADERS, timeout=10)
+	response = requests.get(url, headers=config.HEADERS, timeout=config.TIMEOUT)
 
 	if response.status_code != 200:
 		print(f"Failed to receive the data. Status code: {response.status_code}")
