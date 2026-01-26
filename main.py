@@ -35,11 +35,17 @@ def save_img(full_img_url):
 
 def extract_book_data(book):
 	name_tag = book.find('h3')
+
+	book_link = name_tag.find()
+	book_link = urljoin('https://books.toscrape.com', book_link['href'])
+	book_page = book_page_scraper.get_data(book_link)
+	book_data = book_page_scraper.extract_detailed_book_data(book_page)
+	description = book_data['description']
+
 	title = name_tag.find().text if name_tag else 'N/A'
 
 	price_tag = book.find('p', class_='price_color')
 	price = price_tag.text.strip().replace("Â£","")
-	
 
 	in_stock_tag = book.find('p', class_='instock availability')
 	in_stock = in_stock_tag.text.strip() if in_stock_tag else 'N/A'
@@ -53,13 +59,14 @@ def extract_book_data(book):
 
 	img_tag = book.find('img', class_='thumbnail')
 	img_url = img_tag['src']
-	full_img_url = urljoin(url, img_url)
+	full_img_url = urljoin(config.URL, img_url)
 
 	return {
 		"title": title,
         "price": price,
         "in_stock": in_stock,
 		"rating": rating,
+		"description": description,
         "image_url": full_img_url
 	}
 
@@ -80,9 +87,10 @@ def main(url):
 			print(f'{data["price"]}')
 			print(f'{data["in_stock"]}')
 			print(f'{data["rating"]}')
+			print(f'{data["description"]}')
 			print(f'{data["image_url"]}')
 			save_img(data["image_url"])
 			print('-' * 100)
 		export_books_data(book_data)
 
-main(url)
+main(config.URL)
