@@ -33,7 +33,7 @@ def save_img(full_img_url):
 	except Exception as e:
 		print(f"An unexpected error occurred: {e}")
 
-def extract_book_data(book):
+def extract_book_data(book, url):
 	name_tag = book.find('h3')
 
 	book_link = name_tag.find()
@@ -59,7 +59,7 @@ def extract_book_data(book):
 
 	img_tag = book.find('img', class_='thumbnail')
 	img_url = img_tag['src']
-	full_img_url = urljoin(config.URL, img_url)
+	full_img_url = urljoin(url, img_url)
 
 	return {
 		"title": title,
@@ -76,21 +76,22 @@ def export_books_data(book_data):
 	data_frame.to_json('books.json', orient='records', indent=4)
 	data_frame.to_excel('Book_Data.xlsx', index=False)
 
-def main(url):
-	all_books = get_data(url)
-	book_data = []
-	if all_books:
-		for book in all_books:
-			data = extract_book_data(book)
-			book_data.append(data)
-			(f'{data["title"]}')
-			print(f'{data["price"]}')
-			print(f'{data["in_stock"]}')
-			print(f'{data["rating"]}')
-			print(f'{data["description"]}')
-			print(f'{data["image_url"]}')
-			save_img(data["image_url"])
-			print('-' * 100)
-		export_books_data(book_data)
+def main(generated_urls):
+	for url in generated_urls:
+		all_books = get_data(url)
+		book_data = []
+		if all_books:
+			for book in all_books:
+				data = extract_book_data(book, url)
+				book_data.append(data)
+				(f'{data["title"]}')
+				print(f'{data["price"]}')
+				print(f'{data["in_stock"]}')
+				print(f'{data["rating"]}')
+				print(f'{data["description"]}')
+				print(f'{data["image_url"]}')
+				save_img(data["image_url"])
+				print('-' * 100)
+			export_books_data(book_data)
 
-main(config.URL)
+main(config.GENERATED_URLS)
