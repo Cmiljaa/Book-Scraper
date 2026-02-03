@@ -5,6 +5,12 @@ import pandas
 import book_page_scraper
 import config
 
+def generate_urls():
+	generated_urls = []
+	for i in range(1, 51):
+		generated_urls.append(f"https://books.toscrape.com/catalogue/page-{i}.html")
+	return generated_urls
+
 def get_data(url):
 	response = requests.get(url, headers=config.HEADERS, timeout=config.TIMEOUT)
 
