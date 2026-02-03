@@ -82,7 +82,8 @@ def export_books_data(book_data):
 	data_frame.to_json('books.json', orient='records', indent=4)
 	data_frame.to_excel('Book_Data.xlsx', index=False)
 
-def main(generated_urls):
+def main():
+	generated_urls = generate_urls()
 	for url in generated_urls:
 		all_books = get_data(url)
 		book_data = []
@@ -100,4 +101,4 @@ def main(generated_urls):
 				print('-' * 100)
 			export_books_data(book_data)
 
-main(config.GENERATED_URLS)
+main()
