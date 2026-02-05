@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import config
+from session import session
 
 def extract_detailed_book_data(book):
 	description_div = book.find("div", id="product_description")
@@ -13,9 +14,8 @@ def extract_detailed_book_data(book):
 		'description': description
 	}
 
-def get_data(url):
-	
-	response = requests.get(url, headers=config.HEADERS, timeout=config.TIMEOUT)
+def get_book_page_data(url):
+	response = session.get(url, timeout=config.TIMEOUT)
 
 	if response.status_code != 200:
 		print(f"Failed to receive the data. Status code: {response.status_code}")

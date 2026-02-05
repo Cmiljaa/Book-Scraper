@@ -4,6 +4,7 @@ from urllib.parse import urljoin
 import pandas
 import book_page_scraper
 import config
+from session import session
 
 def generate_urls():
 	generated_urls = []
@@ -12,8 +13,7 @@ def generate_urls():
 	return generated_urls
 
 def get_data(url):
-	response = requests.get(url, headers=config.HEADERS, timeout=config.TIMEOUT)
-
+	response = session.get(url, timeout=config.TIMEOUT)
 	if response.status_code != 200:
 		print(f"Failed to receive the data. Status code: {response.status_code}")
 		return []
@@ -25,6 +25,7 @@ def get_data(url):
 def save_img(full_img_url):
 	try:
 		img_data = requests.get(full_img_url, headers=config.HEADERS, timeout=config.TIMEOUT, stream=True)
+		img_data = session.get(full_img_url, timeout=config.TIMEOUT, stream=True)
 		
 		filename = full_img_url.split('/')[-1]
 		if not filename:
